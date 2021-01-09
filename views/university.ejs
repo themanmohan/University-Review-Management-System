@@ -1,0 +1,36 @@
+<%- include("partials/header") %>
+    <div class="container mt-4">
+        <div class="jumbotron text-center  alert-success">
+            <h1 class="display-4 ">India Best University Reviews</h1>
+            <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
+                featured content or information.</p>
+            <a class="btn btn-success " href="university/new">Add New University</a>
+        </div>
+    </div>
+
+    <!-- ###################################### -->
+    <div class="container">
+        <div class="row ml-2" style="display:flex; flex-wrap: wrap; ">
+            
+        <%universitys.forEach((data)=>{%>
+            <div class="col-md-4 col-sm-3   mt-4">
+                <div class="card border-success" style="width: 18rem;">
+                    <img class="card-img-top" src="<%=data.image%>" alt="Card image cap">
+                    <hr class="m-0 border-success  ">
+                    <div class="card-body alert-success">
+                        <h5 class="card-title"><%=data.name%></h5>
+                        <hr class="m-0 border-success ">
+                        <p class="card-text"><%=data.description%></p>
+                            <hr class="m-0 border-success mb-1">
+                        <a href="university/<%=data._id%>" class="btn btn-primary">View More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <%})%>
+        </div>
+    </div>
+    
+
+        
+            <%- include("partials/footer") %>
