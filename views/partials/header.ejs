@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>URS</title>
+          <link rel="stylesheet" href="/stylesheet/app.css">
+        <title>URS</title>
 </head>
 
 <body>
@@ -18,24 +19,38 @@
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
-            <form class="d-flex input-group w-auto">
+        
+        <div class="collapse navbar-collapse " id="navbarTogglerDemo02">
+          
+            <div class="content">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                    <%if(!currentUser){%>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/register">Register</a>
+                    </li>
+                    <%}else{%>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/auth/logout">Logout</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" ><%=currentUser.username%></a>
+                    </li>
+                    <%}%>
+                </ul>
+            </div>
+            
+            <!-- <form class="d-flex input-group w-auto">
                 <input type="search" class="form-control" placeholder="Type query" aria-label="Search" />
                 <button class="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark">
                     Search
                 </button>
-            </form>
+            </form> -->
+          
+           
         </div>
     </div>
 </nav>
+

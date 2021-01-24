@@ -1,6 +1,7 @@
 const express = require("express")
-const Comment = require('./model/comments')
+
 const University = require("./model/UniversityCamp")
+
 const dbConnection = require('./config/dbconnection')
 
 const app = express()
@@ -44,7 +45,7 @@ const insertData=()=>{
             }
         })
     })
-    
+  console.log("inserted")
 }
 
 const deleteData = () => {
@@ -65,4 +66,3 @@ if (process.argv[2] == "d") {
     deleteData()
 }
 
-console.log(process.argv[2])

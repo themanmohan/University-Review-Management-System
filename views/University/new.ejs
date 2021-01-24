@@ -1,8 +1,9 @@
-<%- include("partials/header") %>
+<%- include("../partials/header") %>
 <form action="/university" method="post">
     <input type="text" name="name" placeholder="name" >
     <input type="text" name="image" placeholder="image">
-    <input type="text" name="description" value="description">
+    <textarea name="description" id="" cols="30" rows="10" placeholder="description"></textarea>
+ 
     <button type="submit">Submit</button>
 </form>
-<%- include("partials/footer") %>
+<%- include("../partials/footer") %>

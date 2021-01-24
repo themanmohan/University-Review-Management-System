@@ -1,0 +1,68 @@
+
+
+<%- include('../partials/header.ejs') %>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <p class="lead">University Management System</p>
+                <div class="list-group">
+                    <li class="list-group-item active">info 1</li>
+                    <li class="list-group-item">info 1</li>
+                    <li class="list-group-item">info 1</li>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="thumbnail">
+                    <img class="img-responsive rounded" style="width: 100%;" src="<%=university.image%>" alt="">
+                    <div class="caption-full p-3 ">
+                        <h4 class="float-right">$9.00/night</h4>
+                        <h4><a href="">
+                            <%=university.name%>
+                            <%=university.author.username%>
+                            </a> </h4>
+                            <p><%=university.description%></p>
+                            <%if(currentUser && university.author.id.equals(currentUser._id)){%>
+                                <a href="/university/<%=university._id%>/edit " class="btn btn-warning">Edit</a>
+                                <form id="form-delete" style="display: inline;" action="/university/<%=university.id%>/delete?_method=DELETE" method="POST">
+                                    <button class="btn btn-danger">DELETE</button>
+                                </form>
+                            <%}%>
+                        
+                    </div>
+                </div>
+                <div class="well alert alert-secondary">
+                    <div class="text-right">
+
+                        <a class="btn btn-primary" href="/university/<%=university._id%>/comment/new">Add new
+                            comment</a>
+                    </div>
+
+                    <%university.comment.forEach(data=>{%>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <%=data.text%>
+                                </p>
+                                <span class="float-right">10 days</span>
+                                <p>
+                                    <strong>
+                                    <%=data.author.username%>
+                                    </strong>
+                                </p>
+                                <%if(currentUser && data.author.id.equals(currentUser._id)){%>
+                                    <a class="btn btn-warning btn-sm"
+                                        href="/university/<%=university._id%>/comment/<%=data._id%>/edit">Edit</a>
+                                    <form style="display: inline;" id="form-delete"
+                                        action="/university/<%=university._id%>/comment/<%=data._id%>/delete?_method=DELETE"
+                                        method="POST">
+                                        <button class="btn btn-sm btn-danger ">Delete</button>
+                                    </form>
+                                <%}%>
+                            </div>
+                        </div>
+                        <%})%>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/footer.ejs') %> 

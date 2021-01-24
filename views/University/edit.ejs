@@ -1,0 +1,9 @@
+<%- include("../partials/header") %>
+    <form action="/university/<%=foundUniversity._id%>/edit?_method=PUT" method="post">
+        <input type="text" name="university[name]" value="<%=foundUniversity.name%>">
+        <input type="text" name="university[image]" value="<%=foundUniversity.image%>">
+        <textarea name="description" id="" cols="30" rows="10" ><%=foundUniversity.description%></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+    <%- include("../partials/footer") %>
