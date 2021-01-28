@@ -1,6 +1,8 @@
 var express = require('express');
 const University = require("../model/UniversityCamp")
-const Comment =require("../model/comments")
+const isLoggedIn=require("../middleware/isLoggedIn")
+const checkingOwrnership = require("../middleware/isLoggedIn")
+
 var router = express.Router();
 
 
@@ -98,32 +100,5 @@ router.delete("/:id/delete", checkingOwrnership, function (req, res) {
    
 })
 
-
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next()
-    }
-    res.redirect("/login")
-}
-
-
-function checkingOwrnership(req,res,next){
-    if (req.isAuthenticated()) {
-        University.findByIdAndUpdate(req.params.id, req.body.university, function (err, data) {
-            if (err) {
-                res.redirect("back")
-            }
-
-            if (data.author.id.equals(req.user._id)) {
-                next()
-            } else {
-                res.redirect("back")
-            }
-        })
-    } else {
-        res.redirect("back")
-    }
-}
 
 module.exports=router
