@@ -1,7 +1,6 @@
 var express = require('express');
 const University = require("../model/UniversityCamp")
-const isLoggedIn=require("../middleware/isLoggedIn")
-const checkingOwrnership = require("../middleware/isLoggedIn")
+const middleware = require("../middleware/middleware")
 
 var router = express.Router();
 
@@ -23,7 +22,7 @@ router.get('/', function (req, res) {
     })
 
 })
-router.post('/', isLoggedIn, function (req, res) {
+router.post('/', middleware.isLoggedIn, function (req, res) {
     name = req.body.name,
         image = req.body.image,
         description = req.body.description
@@ -48,7 +47,7 @@ router.post('/', isLoggedIn, function (req, res) {
 
 })
 
-router.get('/new', isLoggedIn, function (req, res) {
+router.get('/new', middleware.isLoggedIn, function (req, res) {
     res.render('University/new')
 })
 
@@ -79,7 +78,7 @@ router.get("/:id/edit",function(req,res){
    
 })
 
-router.put("/:id/edit",checkingOwrnership,function(req,res){
+router.put("/:id/edit", middleware.checkingOwrnership, function (req, res) {
     
        University.findByIdAndUpdate(req.params.id, req.body.university, function (err, data) {
                res.redirect("/university/" + req.params.id)
@@ -92,7 +91,7 @@ router.put("/:id/edit",checkingOwrnership,function(req,res){
 
 
 
-router.delete("/:id/delete", checkingOwrnership, function (req, res) {
+router.delete("/:id/delete", middleware.checkingOwrnership, function (req, res) {
    
         University.findByIdAndRemove(req.params.id, function (err, data) {
           res.redirect("/university")

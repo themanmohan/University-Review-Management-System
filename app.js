@@ -8,6 +8,7 @@ const IndexRoute = require("./route/index")
 const AuthenticationRoute = require("./route/User")
 const User = require("./model/user")
 const passport=require("passport")
+var flash = require('connect-flash');
 const LocalStratergy=require("passport-local")
 const methodOverride=require("method-override")
 const dbConnection =require('./config/dbconnection')
@@ -38,9 +39,12 @@ app.use(passport.session())
 passport.use(new LocalStratergy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
+app.use(flash());
 
 app.use(function (req, res, next){
     res.locals.currentUser=req.user;
+    res.locals.error=req.flash("error");
+     res.locals.success = req.flash("success")
     next();
 })
 
