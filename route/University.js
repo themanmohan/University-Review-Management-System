@@ -11,7 +11,8 @@ router.get('/', function (req, res) {
 
     University.find({}, function (err, data) {
         if (err) {
-            console.log(err)
+            req.flash("success", "Something went  wrong")
+            res.redirect("back")
         }
 
         res.render("University/university", {
@@ -39,11 +40,13 @@ router.post('/', middleware.isLoggedIn, function (req, res) {
     }
     University.create(newUniversity, function (err, data) {
         if (err) {
-            console.log(err)
+            req.flash("error", "Something went  wrong")
+            res.redirect("back")
         }
-        console.log(data)
+        req.flash("success", "Added successfully")
+        res.redirect("/university")
     })
-    res.redirect("/university")
+    
 
 })
 
@@ -54,7 +57,8 @@ router.get('/new', middleware.isLoggedIn, function (req, res) {
 router.get('/:id', function (req, res) {
     University.findById(req.params.id).populate('comment').exec(function (err, data) {
         if (err) {
-            console.log(err)
+             req.flash("error", "Something went  wrong")
+             res.redirect("back")
 
         } else {
             res.render("University/showUniversity", {
@@ -70,8 +74,10 @@ router.get('/:id', function (req, res) {
 router.get("/:id/edit",function(req,res){
     University.findById(req.params.id,function(err,foundUniversity){
         if(err){
-              console.log(err)
+               req.flash("error", "Something went  wrong")
+               res.redirect("back")
         }else{
+            
            res.render("University/edit", {foundUniversity})
         }
     })
@@ -81,6 +87,7 @@ router.get("/:id/edit",function(req,res){
 router.put("/:id/edit", middleware.checkingOwrnership, function (req, res) {
     
        University.findByIdAndUpdate(req.params.id, req.body.university, function (err, data) {
+              req.flash("success", "Edited Successfully")
                res.redirect("/university/" + req.params.id)
           
           
@@ -94,6 +101,7 @@ router.put("/:id/edit", middleware.checkingOwrnership, function (req, res) {
 router.delete("/:id/delete", middleware.checkingOwrnership, function (req, res) {
    
         University.findByIdAndRemove(req.params.id, function (err, data) {
+            req.flash("success", "deleted Successfully")
           res.redirect("/university")
         })
    

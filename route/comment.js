@@ -9,7 +9,7 @@ var router = express.Router({mergeParams:true});
 router.get("/new", middleware.isLoggedIn, function (req, res) {
     University.findById(req.params.id, function (err, data) {
         if (err) {
-
+             req.flash("error", "Something Went Wrong")
         } else {
             res.render("comment/newcommet", {
                 data
@@ -21,7 +21,8 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
 router.post("/", middleware.isLoggedIn, function (req, res) {
     University.findById(req.params.id, function (err, university) {
         if (err) {
-
+             req.flash("error", "Something Went Wrong")
+             res.redirect("back")
         } else {
             Comment.create(req.body.comment, function (err, comment) {
                 comment.author.id=req.user._id,
@@ -29,6 +30,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
                 comment.save()
                 university.comment.push(comment)
                 university.save()
+                req.flash("success", "Comment Created Successfilly")
                 res.redirect("/university/" + req.params.id)
             })
         }
@@ -40,7 +42,8 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, function (req, res) {
     Comment.findById(req.params.comment_id,function(err,foundComment){
         if(err){
-             console.log(err)
+              req.flash("error", "Something Went Wrong")
+              res.redirect("back")
         }
         else{
               res.render("comment/edit", {
@@ -55,8 +58,10 @@ router.put("/:comment_id/update", middleware.checkCommentOwnership, function (re
   
         Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, foundComment) {
             if (err) {
+                 req.flash("error", "Something Went Wrong")
                 res.redirect("back")
             }else{
+                req.flash("success", "Comment Updated Successfilly")
                   res.redirect("/university/" + req.params.id)
             }
         })
@@ -67,8 +72,10 @@ router.put("/:comment_id/update", middleware.checkCommentOwnership, function (re
 router.delete("/:comment_id/delete", middleware.checkCommentOwnership, function (req, res) {
     Comment.findByIdAndRemove(req.params.comment_id,function(err,data){
         if(err){
+            req.flash("error", "Something Went Wrong")
           res.redirect("back")
         }else{
+            req.flash("success", "Comment Deleted Successfilly")
             res.redirect("/university/"+req.params.id)
         }
     })
