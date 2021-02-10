@@ -3,25 +3,27 @@ const passport = require('passport');
 const User = require('../model/user');
 var router = express.Router();
 
-router.get("/register",function(req,res){
+router.get("/register",async(req,res)=>{
     res.render("Auth/register")
 })
 
-router.post("/register", function (req, res) {
-    var newUser=new User({username:req.body.username})
-    User.register(newUser,req.body.password,function(err,user){
-        if(err){
-            req.flash("error", err.message)
-            return res.render("Auth/register");
-        }
-        passport.authenticate("local")(req,res,function(){
+router.post("/register", async(req, res)=>{
+    try{
+        var newUser = new User({
+            username: req.body.username
+        })
+        const user=await User.register(newUser, req.body.password)
+        passport.authenticate("local")(req, res, function () {
             req.flash("success", "welcome to URS " + user.username)
             res.redirect("/university")
         })
-    })
+    }catch(error){
+       req.flash("error", error.message)
+       return res.render("Auth/register");
+    }
 })
 
-router.get("/login", function (req, res) {
+router.get("/login",  async(req, res)=>{
     res.render("Auth/login")
 })
 
@@ -30,14 +32,14 @@ router.get("/login", function (req, res) {
 router.post("/login",passport.authenticate("local",{
     successRedirect:"/university",
     failureRedirect:"/auth/login",
-}),function(req,res){
+}),async(req,res)=>{
    req.flash("success", "You are loggedIn Successfully")
 })   
 
 //logout
 
-router.get("/logout",function(req,res){
-    req.flash("error","you Logged Out")
+router.get("/logout",async (req,res)=>{
+    req.flash("error","you logged out")
     req.logout();
     res.redirect("/university")
 })

@@ -5,6 +5,7 @@ const bodyParser=require('body-parser')
 const UniversityRoute=require("./route/University")
 const CommentRoute = require("./route/comment")
 const IndexRoute = require("./route/index")
+const reviewRouter = require("./route/reviews")
 const AuthenticationRoute = require("./route/User")
 const User = require("./model/user")
 const passport=require("passport")
@@ -55,6 +56,7 @@ app.use('/university', UniversityRoute)
 app.use('/auth', AuthenticationRoute)
 app.use('/university/:id/comment', CommentRoute)
 app.use('/', IndexRoute)
+app.use('/university/:id/reviews', reviewRouter)
 
 
 app.listen(process.env.PORT ,()=>{

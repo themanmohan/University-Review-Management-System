@@ -1,68 +1,157 @@
 
 
 <%- include('../partials/header.ejs') %>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-3">
-                <p class="lead">University Management System</p>
-                <div class="list-group">
-                    <li class="list-group-item active">info 1</li>
-                    <li class="list-group-item">info 1</li>
-                    <li class="list-group-item">info 1</li>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="thumbnail">
-                    <img class="img-responsive rounded" style="width: 100%;" src="<%=university.image%>" alt="">
-                    <div class="caption-full p-3 ">
-                        <h4 class="float-right">$9.00/night</h4>
-                        <h4><a href="">
-                            <%=university.name%>
-                            <%=university.author.username%>
-                            </a> </h4>
-                            <p><%=university.description%></p>
-                            <%if(currentUser && university.author.id.equals(currentUser._id)){%>
-                                <a href="/university/<%=university._id%>/edit " class="btn btn-warning">Edit</a>
-                                <form id="form-delete" style="display: inline;" action="/university/<%=university.id%>/delete?_method=DELETE" method="POST">
-                                    <button class="btn btn-danger">DELETE</button>
-                                </form>
-                            <%}%>
-                        
-                    </div>
-                </div>
-                <div class="well alert alert-secondary">
-                    <div class="text-right">
-
-                        <a class="btn btn-primary" href="/university/<%=university._id%>/comment/new">Add new
-                            comment</a>
-                    </div>
-
-                    <%university.comment.forEach(data=>{%>
-                        <div class="row">
-                            <div class="col-md-12">
+   
+        
+            <div class="container">
+                <div class="row">
+                    
+                    <div class="col-md-6">
+                        <div class="thumbnail">
+                            <img class="img-responsive" src="<%= university.image %>">
+                            <div class="caption-full">
+                                <h4 class="pull-right">
+                                    <% if (university.rating===0) { %>
+                                        <h5>
+                                            <em>No reviews yet.</em>
+                                        </h5>
+                                        <% }%>
+                                            <p>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star <% if (university.rating > 1.5) { %> checked <% } %>"></span>
+                                                <span class="fa fa-star <% if (university.rating > 2.5) { %> checked <% } %>"></span>
+                                                <span class="fa fa-star <% if (university.rating > 3.5) { %> checked <% } %>"></span>
+                                                <span class="fa fa-star <% if (university.rating > 4.5) { %> checked <% } %>"></span>
+                                            </p>
+                                            </h4>
+                                <h4><a>
+                                        <%=university.name%>
+                                    </a></h4>
                                 <p>
-                                    <%=data.text%>
+                                    <%= university.description %>
                                 </p>
-                                <span class="float-right">10 days</span>
                                 <p>
-                                    <strong>
-                                    <%=data.author.username%>
-                                    </strong>
+                                    <em>Submitted By <%= university.author.username %></em>
                                 </p>
-                                <%if(currentUser && data.author.id.equals(currentUser._id)){%>
-                                    <a class="btn btn-warning btn-sm"
-                                        href="/university/<%=university._id%>/comment/<%=data._id%>/edit">Edit</a>
-                                    <form style="display: inline;" id="form-delete"
-                                        action="/university/<%=university._id%>/comment/<%=data._id%>/delete?_method=DELETE"
+                                <% if(currentUser && university.author.id.equals(currentUser._id)){ %>
+                                    <a class="btn btn-xs btn-warning" href="/University/<%= university._id %>/edit">Edit</a>
+                                    <form id="delete-form" style="display: inline-block;" action="/University/<%= university._id %>/delete?_method=DELETE"
                                         method="POST">
-                                        <button class="btn btn-sm btn-danger ">Delete</button>
+                                        <button class="btn btn-xs btn-danger">Delete</button>
                                     </form>
-                                <%}%>
+                                    <% } %>
+                                        <div style="margin-top: 10px;">
+                                            <a class="btn btn-default" href="/University"><i class="fa fa-arrow-left"></i> Go
+                                                back</a>
+                                        </div>
                             </div>
                         </div>
-                        <%})%>
+                    </div>
+                        <!--Review section-->
+                        <div class="col-md-6">
+                        <div class="thumbnail">
+                            <div class="caption-full">
+                                <% if (university.rating===0) { %>
+                                    <h5>
+                                        <em>No reviews yet.</em>
+                                    </h5>
+                                    <% } else { %>
+                                        <p>
+                                            <span class="fa fa-star checked"></span>
+                                            <span
+                                                class="fa fa-star <% if (university.rating > 1.5) { %> checked <% } %>"></span>
+                                            <span
+                                                class="fa fa-star <% if (university.rating > 2.5) { %> checked <% } %>"></span>
+                                            <span
+                                                class="fa fa-star <% if (university.rating > 3.5) { %> checked <% } %>"></span>
+                                            <span
+                                                class="fa fa-star <% if (university.rating > 4.5) { %> checked <% } %>"></span>
+                                            <em>(total reviews: <%= university.reviews.length %>)</em>
+                                        </p>
+                                        <p>
+                                            Current campground rating: <strong>
+                                                <%= university.rating.toFixed(2) %>
+                                            </strong>
+                                        </p>
+                                        <p>
+                                        <h4>Latest reviews for this campground:</h4>
+                                        </p>
+                                        <hr style="margin-top: 0;">
+        
+                                        <% university.reviews.slice(0, 5).forEach(function(review){ %>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <%- '<span class="fa fa-star checked"></span>' .repeat(review.rating) %>
+                                                        <%- '<span class="fa fa-star"></span>' .repeat(5 - review.rating) %>
+                                                            <div>Review by: <strong>
+                                                                    <%= review.author.username %>
+                                                                </strong></div>
+                                                            <span><em>
+                                                                    <%= review.updatedAt.toDateString() %>
+                                                                </em></span>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <p style="text-align: justify; word-wrap: break-word;">
+                                                        <%= review.text %>
+                                                    </p>
+                                                    <% if(currentUser && review.author.id.equals(currentUser._id)){ %>
+                                                        <a class="btn btn-xs btn-warning"
+                                                            href="/University/<%=university._id %>/reviews/<%=review._id %>/edit">Edit</a>
+                                                        <form id="delete-form" style="display: inline-block;"
+                                                            action="/University/<%=university._id %>/reviews/<%=review._id %>?_method=DELETE"
+                                                            method="POST">
+                                                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                                        </form>
+                                                        <% } %>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <% }); %>
+                                                <div style="margin-bottom: 10px;">
+                                                    <h4><a href="/University/<%= university._id %>/reviews"><i
+                                                                class="fa fa-search" aria-hidden="true"></i> See all reviews</a>
+                                                    </h4>
+                                                </div>
+                                                <% } %>
+                                                    <div>
+                                                        <a class="btn btn-primary btn-lg <% if (currentUser && university.reviews.some(function (review) {return review.author.id.equals(currentUser._id)})) { %> disabled <% } %>"
+                                                            href="/University/<%= university._id %>/reviews/new">
+                                                            Write a New Review</a>
+                                                    </div>
+                            </div>
+                        </div>
+        
+                        <!--Comment section-->
+                        <div class="well">
+                            <div class="text-right">
+                                <a class="btn btn-success" href="/University/<%= university._id %>/comment/new">Add New
+                                    Comment</a>
+                            </div>
+                            <hr>
+                            <% university.comment.forEach(function(comment){ %>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong>
+                                            <%= comment.author.username %>
+                                        </strong>
+                                        <span class="pull-right">10 days ago</span>
+                                        <p>
+                                            <%= comment.text %>
+                                        </p>
+                                        <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
+                                            <a class="btn btn-xs btn-warning"
+                                                href="/University/<%=university._id %>/comment/<%=comment._id %>/edit">Edit</a>
+                                            <form id="delete-form" style="display: inline-block;"
+                                                action="/University/<%=university._id %>/comment/<%=comment._id %>/delete?_method=DELETE"
+                                                method="POST">
+                                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                            </form>
+                                            <% } %>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
     <%- include('../partials/footer.ejs') %> 

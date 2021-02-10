@@ -1,6 +1,5 @@
 
 const mongoose = require('mongoose')
-const Comment =require("./comments")
 var UniversitySchema = mongoose.Schema({
     name: String,
     image: String,
@@ -15,7 +14,15 @@ var UniversitySchema = mongoose.Schema({
             ref:'User'
         },
         username:String
-    }
+    },
+    reviews: [{
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Review"
+          }],
+    rating: {
+       type: Number,
+       default: 0
+          }
 
 })
 
