@@ -1,8 +1,6 @@
 
 
 <%- include('../partials/header.ejs') %>
-   
-        
             <div class="container">
                 <div class="row">
                     
@@ -12,10 +10,8 @@
                             <div class="caption-full">
                                 <h4 class="pull-right">
                                     <% if (university.rating===0) { %>
-                                        <h5>
                                             <em>No reviews yet.</em>
-                                        </h5>
-                                        <% }%>
+                                        <% } else { %>
                                             <p>
                                                 <span class="fa fa-star checked"></span>
                                                 <span class="fa fa-star <% if (university.rating > 1.5) { %> checked <% } %>"></span>
@@ -23,6 +19,8 @@
                                                 <span class="fa fa-star <% if (university.rating > 3.5) { %> checked <% } %>"></span>
                                                 <span class="fa fa-star <% if (university.rating > 4.5) { %> checked <% } %>"></span>
                                             </p>
+                                            <%}%>
+                                            
                                             </h4>
                                 <h4><a>
                                         <%=university.name%>
@@ -30,8 +28,12 @@
                                 <p>
                                     <%= university.description %>
                                 </p>
-                                <p>
+                                <p style="float: right;">
                                     <em>Submitted By <%= university.author.username %></em>
+                                    <br />
+                                    <span><em>
+                                            <%= university.updatedAt.toDateString() %>
+                                        </em></span>
                                 </p>
                                 <% if(currentUser && university.author.id.equals(currentUser._id)){ %>
                                     <a class="btn btn-xs btn-warning" href="/University/<%= university._id %>/edit">Edit</a>

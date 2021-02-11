@@ -24,6 +24,8 @@ var UniversitySchema = mongoose.Schema({
        default: 0
           }
 
+},{
+     timestamps: true
 })
 
 
